@@ -1,6 +1,39 @@
+/*ADD SELF HOST FONTS */
+@font-face {
+  font-family: 'Madefor medium';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('assets/fonts/WixMadeforTextRegular.otf') format('otf');
+}
+
+@font-face {
+  font-family: 'Madefor';
+  font-display: swap;
+  src: url('assets/fonts/WixMadeforDisplayRegular.otf') format('otf');
+}
+
+@font-face {
+  font-family: 'Madefor';
+  font-display: swap;
+  font-weight: 700;
+  src: url('assets/fonts/WixMadeforDisplayExtraBold.otf') format('woff2');
+}
+
+@font-face {
+  font-family: 'Madefor';
+  font-display: swap;
+  font-weight: 500;
+  font-style: italic;
+  src: url('assets/fonts/WixMadeforTextItalic.otf') format('woff2');
+}
+
 html,
 body {
   font-size: 62.5%;
-  font-family: sans-serif;
+  font-family: 'Madefor', 'Roboto', 'sans-serif';
   scroll-behavior: smooth;
+}
+.App {
+  background: #fff;
 }
