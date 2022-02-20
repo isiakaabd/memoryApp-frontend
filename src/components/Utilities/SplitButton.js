@@ -28,11 +28,18 @@ const SplitButton = ({ color, element, btnColor, text }) => {
       fullWidth
       variant="contained"
     >
-      <Button color={color} disableElevation variant="outlined" size="large" sx={{ flex: 1 }}>
+      <Button
+        color={color}
+        disableElevation
+        disableRipple
+        variant="outlined"
+        size="large"
+        sx={{ flex: 1 }}
+      >
         {element}
       </Button>
 
-      <Button color={btnColor} variant="contained">
+      <Button color={btnColor} disableRipple variant="contained">
         {text}
       </Button>
     </ButtonGroup>

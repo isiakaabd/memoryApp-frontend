@@ -31,7 +31,7 @@
 html,
 body {
   font-size: 62.5%;
-  font-family: 'Madefor', 'Roboto', 'sans-serif';
+  font-family: 'Madefor', 'Madefor medium', 'Roboto', 'sans-serif';
   scroll-behavior: smooth;
 }
 .App {

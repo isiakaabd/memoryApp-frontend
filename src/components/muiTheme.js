@@ -92,7 +92,7 @@ export const theme = createTheme({
     },
   },
   typography: {
-    fontFamily: ['"Madefor"', '"Madefor medium"', 'Roboto', 'sans-serif'].join(', '),
+    fontFamily: ['Madefor', 'Madefor medium', 'Roboto', 'sans-serif'].join(','),
     fontSize: 10,
     htmlFontSize: 10,
     h1: {

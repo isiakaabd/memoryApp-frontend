@@ -16,6 +16,14 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     overflow: 'hidden',
   },
+  register: {
+    '&.MuiTypography-root': {
+      cursor: 'pointer',
+      fontSize: '2rem',
+      marginLeft: '.2rem',
+      color: theme.palette.primary.mainBlue,
+    },
+  },
   divider: {
     [theme.breakpoints.down('sm')]: {
       fontSize: '18rem',
@@ -26,9 +34,13 @@ const useStyles = makeStyles((theme) => ({
   },
   Avatar: {
     '&.MuiAvatar-root': {
+      background: 'white',
+      border: `1px solid red !important`,
+    },
+  },
+  secondAvatar: {
+    '&.MuiAvatar-root': {
       border: `1px solid ${theme.palette.primary.mainBlue} !important`,
-      height: '100%',
-      width: '100%',
     },
   },
   checkbox: {
@@ -54,7 +66,6 @@ const SignUp = () => {
   const initialValues = {
     email: '',
     password: '',
-    authType: 'normal',
   };
   const [state, setState] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
@@ -69,15 +80,18 @@ const SignUp = () => {
   const onSubmit = (values) => {
     console.log(values);
   };
-
+  const [type, setType] = useState(true);
   return (
     <Grid container className={classes.parentGrid} direction="column" gap={3}>
       <Grid item>
-        <Typography gutterBottom variant="h1" sx={{ textAlign: 'center' }}>
-          REGISTER
+        <Typography gutterBottom variant="h1">
+          {type ? 'REGISTER' : 'Login'}
         </Typography>
-        <Typography gutterBottom variant="h5">
-          Already have an Account? Login
+        <Typography gutterBottom variant="h5" noWrap>
+          {type ? 'Already' : "Don't"} have an Account?{' '}
+          <Typography variant="span" onClick={() => setType(!type)} className={classes.register}>
+            {type ? 'Login' : 'Register'}
+          </Typography>
         </Typography>
       </Grid>
       <Grid item container justifyContent="center" gap={4} alignItems="center">
@@ -100,7 +114,9 @@ const SignUp = () => {
                             error={errors.email}
                             name="email"
                             label="Email"
+                            memo={memo}
                             setMemo={setMemo}
+                            type="email"
                           />
                         </Grid>
                         {!state || memo ? (
@@ -122,43 +138,42 @@ const SignUp = () => {
                         flexWrap="nowrap"
                         justifyContent="space-between"
                       >
-                        {!state ? (
+                        {!state && !type ? (
                           <Grid item>
                             <FormikControl control="checkbox" label="Remember me" />
                           </Grid>
                         ) : null}
-                        <Grid item className={classes.checkbox}>
-                          <Typography gutterBottom variant="h5">
-                            Forget Password or Email?
-                          </Typography>
-                        </Grid>
+                        {!type ? (
+                          <Grid item className={classes.checkbox}>
+                            <Typography gutterBottom variant="h5">
+                              Forget Password or Email?
+                            </Typography>
+                          </Grid>
+                        ) : null}
                       </Grid>
                       <Grid
                         item
                         container
                         alignItems="center"
-                        // sx={{ justifyContent: 'space-between' }}
+                        justifyContent="space-between"
                         flexWrap="nowrap"
-                        xs={12}
                       >
-                        <Grid item container xs={4}>
+                        <Grid item xs={4}>
                           <CustomButton title="Sign Up" state={state} />
                         </Grid>
 
                         {memo && state ? (
                           <>
-                            <Grid item xs={3}>
+                            <Grid item>
                               <Typography variant="h5">OR</Typography>
                             </Grid>
-                            <Grid item container xs="auto" height="100%">
-                              <AvatarGroup
-                                sx={{ gap: 2, height: '100%', justifyContent: 'flex-end' }}
-                              >
-                                <Avatar className={classes.Avatar}>
+                            <Grid item xs={4}>
+                              <AvatarGroup sx={{ height: '100%', justifyContent: 'space-between' }}>
+                                <Avatar className={classes.Avatar} xs>
                                   <GoogleIcon color="error" />
                                 </Avatar>
-                                <Avatar className={classes.Avatar}>
-                                  <GoogleIcon />
+                                <Avatar xs className={`${classes.Avatar} ${classes.secondAvatar}`}>
+                                  <FacebookTwoToneIcon color="info" />
                                 </Avatar>
                               </AvatarGroup>
                             </Grid>
@@ -172,7 +187,7 @@ const SignUp = () => {
             }}
           </Formik>
         </Grid>
-        {!memo || !state ? (
+        {!state ? (
           <Divider variant="middle" orientation="vertical" className={classes.divider} flexItem />
         ) : memo && state ? null : (
           <Grid item container alignItems="flex-end">
@@ -183,7 +198,7 @@ const SignUp = () => {
         )}
 
         {!memo || !state ? (
-          <Grid item container gap={1} xs={12} md={4} className={classes.order} alignItems="center">
+          <Grid item container gap={1} xs={12} md={3} className={classes.order} alignItems="center">
             <Grid item container gap={2}>
               <SplitButton
                 color="error"

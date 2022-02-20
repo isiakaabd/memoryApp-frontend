@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { Field } from 'formik';
 import PropTypes from 'prop-types';
 import { Grid, TextField } from '@mui/material';
@@ -12,10 +12,14 @@ const CustomTextFied = ({
   onChange,
   label,
   value,
+  memo,
   setMemo,
   ...props
 }) => {
-  const focus = () => setMemo(true);
+  const focus = useCallback(() => {
+    setMemo(true);
+  }, []);
+
   return (
     <TextField
       error={error ? error : null}
@@ -23,8 +27,8 @@ const CustomTextFied = ({
       label={label}
       name={name}
       fullWidth
-      autoFocus={false}
-      onFocus={focus}
+      autoFocus={!memo && type === 'email' && true}
+      onFocus={type === 'email' ? focus : null}
       value={value}
       variant="standard"
       onChange={onChange}
@@ -34,9 +38,11 @@ const CustomTextFied = ({
   );
 };
 CustomTextFied.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.bool,
   value: PropTypes.string,
   id: PropTypes.string,
+  type: PropTypes.string,
+  memo: PropTypes.string,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   text: PropTypes.string,
@@ -45,19 +51,27 @@ CustomTextFied.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-const Input = (props) => {
-  const { label, name, setMemo, ...rest } = props;
-
+const Input = ({ label, name, setMemo, type, memo, ...rest }) => {
   return (
     <Grid container>
-      <Field as={CustomTextFied} id={name} setMemo={setMemo} name={name} label={label} {...rest} />
+      <Field
+        as={CustomTextFied}
+        id={name}
+        memo={memo}
+        setMemo={setMemo}
+        type={type}
+        name={name}
+        label={label}
+        {...rest}
+      />
     </Grid>
   );
 };
 Input.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-
+  type: PropTypes.string,
+  memo: PropTypes.string,
   setMemo: PropTypes.func,
 };
 
