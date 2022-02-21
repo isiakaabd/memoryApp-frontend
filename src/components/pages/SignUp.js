@@ -8,6 +8,10 @@ import { FormikControl } from 'components/validation';
 import { SplitButton, CustomButton } from 'components/Utilities';
 import GoogleIcon from '@mui/icons-material/Google';
 import FacebookTwoToneIcon from '@mui/icons-material/FacebookTwoTone';
+import { register, login } from 'components/hooks/function';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useMutation } from 'react-query';
+import useAuth from 'components/context/useAuth';
 
 const useStyles = makeStyles((theme) => ({
   parentGrid: {
@@ -60,8 +64,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 const SignUp = () => {
+  const { setAuth } = useAuth();
   const theme = useTheme();
   const [memo, setMemo] = useState(false);
+  const { mutateAsync, error } = useMutation(register);
+  const { mutateAsync: loginMutation } = useMutation(login);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const classes = useStyles();
   const initialValues = {
     email: '',
@@ -72,40 +82,66 @@ const SignUp = () => {
   useLayoutEffect(() => {
     setState(isMobile);
   }, [isMobile]);
-
+  const from = location?.state?.from.pathname || '/login';
   const validationSchema = Yup.object({
     email: Yup.string().email('Enter a valid email').required('Email is required'),
     password: Yup.string().required('password is required'),
   });
-  const onSubmit = (values) => {
-    console.log(values);
+  const onSubmit = async (values, onSubmitProps) => {
+    const { email, password } = values;
+    const formData = {
+      email,
+      password,
+    };
+    try {
+      if (types) await mutateAsync(formData);
+      else {
+        const { token, email, _id, refreshToken } = await loginMutation(formData);
+        setAuth({
+          token,
+          email,
+          id: _id,
+          refreshToken,
+        });
+
+        navigate(from, { replace: true });
+      }
+    } catch (err) {
+      console.error(error);
+    } finally {
+      onSubmitProps.resetForm();
+    }
   };
-  const [type, setType] = useState(true);
+
+  if (error) console.log(error);
+
+  const [types, setTypes] = useState(false);
   return (
     <Grid container className={classes.parentGrid} direction="column" gap={3}>
       <Grid item>
         <Typography gutterBottom variant="h1">
-          {type ? 'REGISTER' : 'Login'}
+          {types ? 'REGISTER' : 'Login'}
         </Typography>
         <Typography gutterBottom variant="h5" noWrap>
-          {type ? 'Already' : "Don't"} have an Account?{' '}
-          <Typography variant="span" onClick={() => setType(!type)} className={classes.register}>
-            {type ? 'Login' : 'Register'}
+          {types ? 'Already' : "Don't"} have an Account?{' '}
+          <Typography variant="span" onClick={() => setTypes(!types)} className={classes.register}>
+            {types ? 'Login' : 'Register'}
           </Typography>
         </Typography>
       </Grid>
       <Grid item container justifyContent="center" gap={4} alignItems="center">
-        <Grid item xs={12} md={5} container className={classes.gridOrder}>
+        <Grid item xs={12} md={4} container className={classes.gridOrder}>
           <Formik
             initialValues={initialValues}
             onSubmit={onSubmit}
             validationSchema={validationSchema}
-            validateOnChange={true}
+            // validateOnChange={false}
+            validateOnBlur
           >
-            {({ errors }) => {
+            {({ errors, isSubmitting }) => {
               return (
                 <Grid item container width="100%" direction="column">
-                  <Form>
+                  <Form aria-autocomplete="off" autoComplete="off">
                     <Grid item container gap={3}>
                       <Grid item container gap={3}>
                         <Grid item container>
@@ -114,9 +150,9 @@ const SignUp = () => {
                             error={errors.email}
                             name="email"
                             label="Email"
-                            memo={memo}
+                            memo={state}
                             setMemo={setMemo}
-                            type="email"
+                            types="email"
                           />
                         </Grid>
                         {!state || memo ? (
@@ -138,12 +174,12 @@ const SignUp = () => {
                         flexWrap="nowrap"
                         justifyContent="space-between"
                       >
-                        {!state && !type ? (
+                        {!state && !types ? (
                           <Grid item>
                             <FormikControl control="checkbox" label="Remember me" />
                           </Grid>
                         ) : null}
-                        {!type ? (
+                        {!types ? (
                           <Grid item className={classes.checkbox}>
                             <Typography gutterBottom variant="h5">
                               Forget Password or Email?
@@ -159,20 +195,24 @@ const SignUp = () => {
                         flexWrap="nowrap"
                       >
                         <Grid item xs={4}>
-                          <CustomButton title="Sign Up" state={state} />
+                          <CustomButton
+                            title={types ? 'Sign Up' : 'Login'}
+                            isSubmitting={isSubmitting}
+                            state={state}
+                          />
                         </Grid>
 
                         {memo && state ? (
                           <>
                             <Grid item>
-                              <Typography variant="h5">OR</Typography>
+                              <Typography variant="h4">OR</Typography>
                             </Grid>
                             <Grid item xs={4}>
                               <AvatarGroup sx={{ height: '100%', justifyContent: 'space-between' }}>
-                                <Avatar className={classes.Avatar} xs>
+                                <Avatar className={classes.Avatar}>
                                   <GoogleIcon color="error" />
                                 </Avatar>
-                                <Avatar xs className={`${classes.Avatar} ${classes.secondAvatar}`}>
+                                <Avatar className={`${classes.Avatar} ${classes.secondAvatar}`}>
                                   <FacebookTwoToneIcon color="info" />
                                 </Avatar>
                               </AvatarGroup>

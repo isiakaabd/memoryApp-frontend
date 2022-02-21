@@ -54,7 +54,7 @@ const CustomButton = ({
       className={classes.button}
       {...rest}
     >
-      {!isSubmitting && title} {isSubmitting && <Loader size={35} color="info" />}
+      {!isSubmitting && title} {isSubmitting && <Loader size={20} color="info" />}
     </Button>
   );
 };

@@ -52,6 +52,15 @@ export const theme = createTheme({
         },
       },
     },
+    MuiInputBase: {
+      styleOverrides: {
+        root: {
+          '&.MuiInput-root:before': {
+            border: 0,
+          },
+        },
+      },
+    },
     MuiInput: {
       styleOverrides: {
         root: {
@@ -59,6 +68,7 @@ export const theme = createTheme({
             fontSize: '2rem',
             borderColor: dark,
             background: 'transparent',
+            autoComplete: 'off',
           },
         },
       },

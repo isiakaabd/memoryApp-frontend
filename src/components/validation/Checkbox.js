@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 const Checkboxs = ({ label }) => {
   return (
-    <Grid container gap={1}>
-      <FormControlLabel label={label} control={<Checkbox />} />
+    <Grid container>
+      <FormControlLabel label={label} control={<Checkbox color="info" />} />
     </Grid>
   );
 };

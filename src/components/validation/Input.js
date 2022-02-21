@@ -7,7 +7,7 @@ const CustomTextFied = ({
   text,
   error,
   id,
-  type,
+  types,
   name,
   onChange,
   label,
@@ -22,13 +22,18 @@ const CustomTextFied = ({
 
   return (
     <TextField
-      error={error ? error : null}
+      error={!!error ? error : null}
       id={id}
       label={label}
       name={name}
+      inputProps={{
+        autoComplete: 'off',
+      }}
       fullWidth
-      autoFocus={!memo && type === 'email' && true}
-      onFocus={type === 'email' ? focus : null}
+      autoComplete="off"
+      autoSave="off"
+      // autoFocus={!memo && types === 'email' && true}
+      onFocus={types === 'email' ? focus : null}
       value={value}
       variant="standard"
       onChange={onChange}
@@ -38,20 +43,19 @@ const CustomTextFied = ({
   );
 };
 CustomTextFied.propTypes = {
-  error: PropTypes.bool,
+  error: PropTypes.string,
   value: PropTypes.string,
   id: PropTypes.string,
-  type: PropTypes.string,
-  memo: PropTypes.string,
+  types: PropTypes.string,
+  memo: PropTypes.bool,
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
   text: PropTypes.string,
   setMemo: PropTypes.func,
-  type: PropTypes.string,
   onChange: PropTypes.func.isRequired,
 };
 
-const Input = ({ label, name, setMemo, type, memo, ...rest }) => {
+const Input = ({ label, name, setMemo, types, memo, ...rest }) => {
   return (
     <Grid container>
       <Field
@@ -59,7 +63,7 @@ const Input = ({ label, name, setMemo, type, memo, ...rest }) => {
         id={name}
         memo={memo}
         setMemo={setMemo}
-        type={type}
+        types={types}
         name={name}
         label={label}
         {...rest}
@@ -70,8 +74,8 @@ const Input = ({ label, name, setMemo, type, memo, ...rest }) => {
 Input.propTypes = {
   label: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string,
-  memo: PropTypes.string,
+  types: PropTypes.string,
+  memo: PropTypes.bool,
   setMemo: PropTypes.func,
 };
 
