@@ -1,5 +1,9 @@
 import axios from 'axios';
 const url = 'https://remlad-memories.herokuapp.com';
+
+//  'http://localhost:8000';
+
+// ;
 export const register = async (value) => {
   const { data } = await axios.post(`${url}/signup`, value);
 

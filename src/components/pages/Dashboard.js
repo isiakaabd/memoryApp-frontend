@@ -1,9 +1,26 @@
 import React from 'react';
-import useAuth from 'components/context/useAuth';
+import { useQuery } from 'react-query';
+import useAxios from 'components/hooks/useAxios';
+// import { getPosts } from 'components/hooks/function';
 
 const Dashboard = () => {
-  const { auth } = useAuth();
+  const axiosPrivate = useAxios();
+  const getPosts = async () => {
+    const { data } = await axiosPrivate.get('/post');
+    return data;
+  };
+  const { data } = useQuery('posts', getPosts);
 
-  return <div>welcome {auth.email} </div>;
+  return (
+    <div>
+      {data?.length > 0 ? (
+        data.map((i, index) => {
+          return <div key={index}>{i.firstName}</div>;
+        })
+      ) : (
+        <h6>No Data</h6>
+      )}{' '}
+    </div>
+  );
 };
 export default Dashboard;

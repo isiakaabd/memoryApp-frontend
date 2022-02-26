@@ -96,12 +96,11 @@ const SignUp = () => {
     try {
       if (types) await mutateAsync(formData);
       else {
-        const { token, email, _id, refreshToken } = await loginMutation(formData);
+        const { token, email, _id } = await loginMutation(formData);
         setAuth({
-          token,
+          accessToken: token,
           email,
           id: _id,
-          refreshToken,
         });
 
         navigate(from, { replace: true });

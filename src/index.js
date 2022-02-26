@@ -2,10 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import { QueryClient, QueryClientProvider } from 'react-query';
-const queryClient = new QueryClient();
 import { AuthProvider } from './components/context/AuthProvider';
 import { CssBaseline } from '@mui/material';
 
+const queryClient = new QueryClient();
 ReactDOM.render(
   <>
     <CssBaseline />
@@ -17,3 +17,4 @@ ReactDOM.render(
   </>,
   document.getElementById('root'),
 );
+//   "plugin:promise/recommended",

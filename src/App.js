@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import './App.css';
 import RequireAuth from 'components/route/RequireAuth';
 import { Dashboard, SignUp } from 'components/pages';
+import PersistLogin from 'components/pages/PersistLogin';
 const App = () => {
   return (
     <ThemeProvider theme={theme}>
@@ -12,15 +13,16 @@ const App = () => {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<SignUp />} />
-
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <Dashboard />
-                </RequireAuth>
-              }
-            />
+            <Route element={<PersistLogin />}>
+              <Route
+                path="/"
+                element={
+                  <RequireAuth>
+                    <Dashboard />
+                  </RequireAuth>
+                }
+              />
+            </Route>
           </Routes>
         </BrowserRouter>
       </div>
