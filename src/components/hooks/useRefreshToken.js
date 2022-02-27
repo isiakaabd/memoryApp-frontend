@@ -2,18 +2,15 @@ import axios from 'axios';
 import useAuth from 'components/context/useAuth';
 const url = 'https://remlad-memories.herokuapp.com';
 
-// 'http://localhost:8000';
-// ;
-
 const useRefreshToken = () => {
-  const { setAuth } = useAuth();
+  const { setAuth, auth } = useAuth();
   const refresh = async () => {
     const response = await axios.get(`${url}/refreshtoken`, {
       withCredentials: true,
     });
-    setAuth((prev) => {
+    setAuth(() => {
       return {
-        ...prev,
+        ...auth,
         accessToken: response.data.accessToken,
       };
     });
